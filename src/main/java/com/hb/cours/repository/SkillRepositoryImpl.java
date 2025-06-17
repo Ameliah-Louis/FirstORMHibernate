@@ -15,10 +15,9 @@ public class SkillRepositoryImpl implements SkillRepository {
     public List<Skill> findAll() {
         //Créer une liste sous forme de tableau
         List<Skill> skills = new ArrayList<>();
-        try {
+        try (Connection connection = Database.getConnection();) {
             // Bonus: Créer un classe Database avec une methode getConnection static qui va return spécifiquement cette ligne
             // Connection connection= DriverManager.getConnection("jdbc:mysql://root:1234@localhost:3306/hb_cda_jdbc");
-            Connection connection = Database.getConnection();
             System.out.println( "DB connection Ok!" );
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Skills");
             ResultSet rs = statement.executeQuery();
@@ -32,9 +31,7 @@ public class SkillRepositoryImpl implements SkillRepository {
 
 //                System.out.println(rs.getString("label"));
             }
-            rs.close();
-            statement.close();
-            connection.close();
+
         } catch (SQLException e) {
             throw new UnsupportedOperationException("Unimplemented method 'findAll()'");
         }
