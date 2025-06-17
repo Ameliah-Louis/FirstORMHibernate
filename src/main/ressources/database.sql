@@ -6,8 +6,8 @@
 -- Pas de "CREATE Database" car on souhaite pouvoir s'adapter et contrôler totalement sa création
 
 -- Drop first pour vider les tables si elles existent déjà
-    DROP TABLE if EXISTS Student_Skill;
-    DROP TABLE if EXISTS Skill;
+    DROP TABLE if EXISTS Student_Skills;
+    DROP TABLE if EXISTS Skills;
     DROP TABLE if EXISTS Student;
     DROP TABLE if EXISTS Promo;
 
@@ -31,21 +31,21 @@ CREATE TABLE Student (
 );
 
 -- Création de la table Skill
-CREATE TABLE Skill (
+CREATE TABLE Skills (
                        id INT PRIMARY KEY AUTO_INCREMENT,
                        label VARCHAR(100) NOT NULL
 );
 
 -- Table de liaison pour la relation many-to-many entre Student et Skill
-CREATE TABLE Student_Skill (
+CREATE TABLE Student_Skills (
                                student_id INT,
                                skill_id INT,
                                PRIMARY KEY (student_id, skill_id),
                                FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE,
-                               FOREIGN KEY (skill_id) REFERENCES Skill(id) ON DELETE CASCADE
+                               FOREIGN KEY (skill_id) REFERENCES Skills(id) ON DELETE CASCADE
 );
 
-INSERT INTO Skill (label) VALUES ('Java'),('JS'), ('PHP'), ('UML');
+INSERT INTO Skills (label) VALUES ('Java'),('JS'), ('PHP'), ('UML');
 INSERT INTO Promo (name,startDate,duration) VALUES ('CDA_R21', '2025-03-04', 217),('FT1', '2022-01-01', 1200);
 INSERT INTO Student (name, firstname, birthday, promo_id) VALUES
     ('LOUIS','Amy', '1989-03-09', 1),
@@ -53,7 +53,7 @@ INSERT INTO Student (name, firstname, birthday, promo_id) VALUES
     ('Khan', 'Habibi', '1990-01-12', 2),
     ('Bobson', 'Bobby', '1971-04-23', NULL);
 
-INSERT INTO student_skill VALUES
+INSERT INTO student_skills VALUES
 (1, 4),
 (1,2),
 (2,3),

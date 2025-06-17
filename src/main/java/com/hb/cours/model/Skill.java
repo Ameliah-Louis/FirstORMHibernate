@@ -1,4 +1,4 @@
-package com.hb.cda.firstjdbc.entity;
+package com.hb.cours.model;
 
 public class Skill {
     private Integer id;
