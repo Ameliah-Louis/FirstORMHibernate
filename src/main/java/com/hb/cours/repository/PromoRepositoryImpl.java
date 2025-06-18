@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,31 +70,16 @@ public class PromoRepositoryImpl  implements PromoRepository {
         return list;
     }
 
-//                if (stu == null) {
-//                    Promo promo = new Promo();
-//                    promo.setId(rs.getInt("promo_id"));
-//                    promo.setName(rs.getString("promo_name"));
-//                    java.sql.Date d = rs.getDate("startDate");
-//                    if (d != null) promo.setStartDate(d.toLocalDate());
-//                    promo.setDuration(rs.getInt("duration"));
-//
-//                    stu = new Student();
-//                    stu.setId(studentId);
-//                    stu.setFirstName(rs.getString("first_name"));
-//                    stu.setName(rs.getString("last_name"));
-//                    stu.setPromo(promo);
-//                    students.add(stu);
-//                }
 
 
-
-    private Student resultToInstance(ResultSet rs) throws SQLException {
-        return new Student(
-                rs.getInt("student.id"),
-                rs.getString("student.name"),
-                rs.getString("student.firstname"),
-                rs.getDate("student.birthday").toLocalDate());
+    protected static Promo resultToInstance(ResultSet rs) throws SQLException {
+        return new Promo(
+                rs.getInt("promo.id"),
+                rs.getString("promo.name"),
+                rs.getObject("promo.start_date", LocalDate.class),
+                rs.getInt("promo.duration"));
     }
+
 
     @Override
     public Object findById(Object id) {

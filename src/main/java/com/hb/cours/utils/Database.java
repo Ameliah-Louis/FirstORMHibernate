@@ -19,6 +19,8 @@ public class Database {
      * @throws SQLException
      */
     public static Connection getConnection() throws SQLException {
+        System.out.println( "DB connection!" );
         return DriverManager.getConnection(URL, USER, PASSWORD);
+
     }
 }

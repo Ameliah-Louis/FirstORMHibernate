@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,17 +24,7 @@ public class StudentRepositoryImpl implements StudentRepository {
             PreparedStatement statement = connection.prepareStatement(findAllSQL);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                Student instance = resultToInstance(rs);
-                rs.getInt("student.promo_id");
-                if (!rs.wasNull()) {
-
-                    instance.setPromo(
-                            new Promo(
-                                    rs.getInt("promo.id"),
-                                    rs.getString("promo.name"),
-                                    rs.getDate("promo.startDate").toLocalDate(),
-                                    rs.getInt("promo.duration")));
-                }
+                Student instance = resultToInstance(rs, true);
                 list.add(instance);
             }
         } catch (SQLException e) {
@@ -42,12 +33,26 @@ public class StudentRepositoryImpl implements StudentRepository {
         return list;
     }
 
-    private Student resultToInstance(ResultSet rs) throws SQLException {
-        return new Student(
+    /**
+     * Méthode qui convertit une ligne de resultset en instance de la classe Student.
+     * @param rs Le resultset duquel on tire les colonnes
+     * @param withRelation Est
+     * @return
+     * @throws SQLException
+     */
+    protected  Student resultToInstance(ResultSet rs, boolean withRelation) throws SQLException {
+        Student instance = new Student(
                 rs.getInt("student.id"),
                 rs.getString("student.name"),
                 rs.getString("student.firstname"),
-                rs.getDate("student.birthday").toLocalDate());
+                rs.getObject("student.birthday", LocalDate.class));
+        rs.getInt("student.promo_id");
+        if (!rs.wasNull() && withRelation) {
+
+            instance.setPromo(PromoRepositoryImpl.resultToInstance(rs));
+        }
+        return instance;
+
     }
 
     @Override

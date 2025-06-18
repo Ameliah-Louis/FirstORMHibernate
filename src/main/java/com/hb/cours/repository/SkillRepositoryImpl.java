@@ -19,28 +19,24 @@ public class SkillRepositoryImpl implements SkillRepository {
     @Override
     public List<Skill> findAll() {
         //Créer une liste sous forme de tableau
-        List<Skill> skills = new ArrayList<>();
+        List<Skill> list = new ArrayList<>();
         try (Connection connection = Database.getConnection();) {
             // Bonus: Créer un classe Database avec une methode getConnection static qui va return spécifiquement cette ligne
             // Connection connection= DriverManager.getConnection("jdbc:mysql://root:1234@localhost:3306/hb_cda_jdbc");
             System.out.println( "DB connection Ok!" );
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Skills");
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                //Dans la boucle, au lieu de faire des system.out.print nul, faire des instances
-                //de Skill qu'on met dans la list et on la return à la fin de la méthode
-                Skill skill = new Skill();
-                skill.setId(rs.getInt("id"));
-                skill.setLabel(rs.getString("label"));
-                skills.add(skill);
+                while (rs.next()) {
+                    Skill instance = resultToInstance(rs);
 
-//                System.out.println(rs.getString("label"));
-            }
+                    list.add(instance);
+
+                }
 
         } catch (SQLException e) {
             throw new UnsupportedOperationException("Unimplemented method 'findAll()'");
         }
-        return skills;
+        return list;
     }
 
 
@@ -114,9 +110,17 @@ public class SkillRepositoryImpl implements SkillRepository {
         }
     }
 
-    private Skill resultToInstance(ResultSet rs) throws SQLException {
+    protected static Skill resultToInstance(ResultSet rs) throws SQLException {
         return new Skill(
                 rs.getInt("skill.id"),
                 rs.getString("skill.label"));
+
     }
+    @Override
+    public List<Skill> findByStudent(int idStudent) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByStudent'");
+    }
+
+
 }
